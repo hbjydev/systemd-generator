@@ -145,6 +145,7 @@ WantedBy=timers.target`;
           </div>
         </div>
       </main>
+      <p className="text-center container mx-auto">Made by Hayden Young on <a className="font-bold text-blue-500 underline" href="https://github.com/hbjydev/systemd-generator">GitHub</a></p>
     </>
   );
 };
