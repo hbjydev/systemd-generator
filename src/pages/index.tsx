@@ -49,7 +49,7 @@ WantedBy=timers.target`;
 
       <main className="container mx-auto bg-gray-50">
         <h1 className="font-bold text-3xl text-center py-6">Simple Service Generator</h1>
-        <div className="flex">
+        <div className="grid grid-cols-2">
           <div className="w-full p-6 flex flex-col gap-6">
             <div className="w-full flex flex-col gap-6">
               <fieldset className="flex flex-col gap-3">
@@ -121,7 +121,7 @@ WantedBy=timers.target`;
             </div>
           </div>
 
-          <div className="w-full p-6 flex flex-col gap-6">
+          <div className="max-w-full p-6 flex flex-col gap-6">
             <p>Place these files on the system at the paths above them, and run <span className="font-mono bg-gray-200 p-1 rounded">systemctl daemon-reload</span> to make sure they are loaded by systemd.</p>
             <div>
               <div className="bg-gray-300 h-10 flex items-center px-4">/etc/systemd/system/{name}.service</div>
@@ -142,6 +142,10 @@ WantedBy=timers.target`;
               </div> :
               null
             }
+            <pre className="bg-gray-100 p-4 flex flex-col gap-1 text-sm overflow-x-scroll">
+              <p>curl systemd.h4n.io/api/unit?data={Buffer.from(JSON.stringify({ name, description, program, isTimer })).toString('base64')} &gt; /etc/systemd/system/{name}.service</p>
+              {isTimer ? <p>curl systemd.h4n.io/api/timer?data={Buffer.from(JSON.stringify({ name, description, calendar })).toString('base64')} &gt; /etc/systemd/system/{name}.service</p> : null }
+            </pre>
           </div>
         </div>
       </main>
