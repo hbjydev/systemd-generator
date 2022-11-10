@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { SystemdService } from "../lib/service";
 import { SystemdTimer } from "../lib/timer";
 import { RestartTypeField } from "../components/RestartTypeField";
