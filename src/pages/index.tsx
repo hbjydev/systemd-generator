@@ -168,7 +168,7 @@ const Home: NextPage = () => {
                       className="font-bold text-blue-500 underline"
                       href="https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events"
                     >
-                      freedesktop.org
+                      systemd.time(7)
                     </a>{" "}
                     for syntax help.
                   </>
