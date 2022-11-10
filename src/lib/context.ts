@@ -5,6 +5,9 @@ export type FormData = {
   name: string;
   description: string;
 
+  startLimitInterval: number;
+  startLimitBurst: number;
+
   service: {
     execStart: string;
     restartType?: SystemdServiceRestartType;
@@ -14,8 +17,6 @@ export type FormData = {
     enabled: boolean;
     calendar: string;
   };
-
-  [key: string]: string | { [key: string]: (string | boolean) };
 };
 
 export type FormContextStructure = {

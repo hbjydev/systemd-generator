@@ -6,6 +6,7 @@ type Props = {
   placeholder?: string;
   value?: string;
   helper?: React.ReactNode;
+  number?: boolean;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
 };
 
@@ -15,6 +16,7 @@ export const TextField: React.FC<Props> = ({
   placeholder,
   value,
   helper,
+  number,
   onChange,
 }) => {
   return (
@@ -24,7 +26,7 @@ export const TextField: React.FC<Props> = ({
         <input
           id={name}
           className="border bg-white h-9 flex items-center px-2 focus:border-blue-500 focus:outline-none"
-          type="text"
+          type={number ? 'number' : 'text'}
           placeholder={placeholder}
           onChange={onChange}
           value={value}

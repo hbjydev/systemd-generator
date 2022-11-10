@@ -19,6 +19,8 @@ const Home: NextPage = () => {
     context.data.timer.enabled ? "oneshot" : "simple"
   );
   service.restart = context.data.service.restartType;
+  service.startLimitBurst = context.data.startLimitBurst;
+  service.startLimitInterval = context.data.startLimitInterval;
 
   const timer = new SystemdTimer(
     context.data.name,
@@ -84,6 +86,26 @@ const Home: NextPage = () => {
                 />
 
                 <RestartTypeField />
+
+                <TextField
+                  number
+                  name="startLimitBurst"
+                  label="Number of startup retries before fail"
+                  onChange={(ev) => {
+                    context.update({ startLimitBurst: parseInt(ev.target.value) });
+                  }}
+                  value={context.data.startLimitBurst.toString()}
+                />
+
+                <TextField
+                  number
+                  name="startLimitInterval"
+                  label="Startup timeout before fail"
+                  onChange={(ev) => {
+                    context.update({ startLimitInterval: parseInt(ev.target.value) });
+                  }}
+                  value={context.data.startLimitInterval.toString()}
+                />
               </div>
             </div>
 

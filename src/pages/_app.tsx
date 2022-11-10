@@ -9,6 +9,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   const [data, setData] = useState<FormData>({
     name: "grafana-agent",
     description: "Run Grafana Agent",
+    startLimitBurst: 5,
+    startLimitInterval: 200,
     service: {
       execStart: "/usr/bin/grafana-agent",
       restartType: "no",
