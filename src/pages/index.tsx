@@ -217,33 +217,6 @@ const Home: NextPage = () => {
                 </pre>
               </div>
             ) : null}
-            <pre className="flex flex-col gap-1 overflow-x-scroll bg-gray-100 p-4 text-sm">
-              <p>
-                curl {domain}/api/unit?data=
-                {Buffer.from(
-                  JSON.stringify({
-                    name: context.data.name,
-                    description: context.data.description,
-                    program: context.data.service.execStart,
-                    isTimer: context.data.timer.enabled,
-                  })
-                ).toString("base64")}{" "}
-                &gt; /etc/systemd/system/{context.data.name}.service
-              </p>
-              {context.data.timer.enabled ? (
-                <p>
-                  curl {domain}/api/timer?data=
-                  {Buffer.from(
-                    JSON.stringify({
-                      name: context.data.name,
-                      description: context.data.description,
-                      calendar: context.data.timer.calendar,
-                    })
-                  ).toString("base64")}{" "}
-                  &gt; /etc/systemd/system/{context.data.name}.timer
-                </p>
-              ) : null}
-            </pre>
           </div>
         </div>
       </main>
