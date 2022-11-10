@@ -1,13 +1,19 @@
 import React from "react";
 import type { SystemdServiceRestartType } from "./service";
 
-export type FormData = {
+export type BaseUnitData = {
   name: string;
   description: string;
-
   startLimitInterval?: number;
   startLimitBurst?: number;
+}
 
+export type ContextSkeleton<T> = {
+  data: T & BaseUnitData;
+  update: (newData: Partial<T & BaseUnitData>) => void;
+}
+
+export type ServiceTimerFormData = {
   service: {
     execStart: string;
     restartType?: SystemdServiceRestartType;
@@ -20,10 +26,16 @@ export type FormData = {
   };
 };
 
-export type FormContextStructure = {
-  data: FormData;
-  update: (data: Partial<FormData>) => void;
+export type VolumeMountFormData = {
+  what: string;
+  where: string;
+  type: string;
+  options: string;
 };
 
-export const FormContext =
-  React.createContext<FormContextStructure | undefined>(undefined);
+export const ServiceTimerContext =
+  React.createContext<ContextSkeleton<ServiceTimerFormData> | undefined>(undefined);
+
+
+export const VolumeMountContext =
+  React.createContext<ContextSkeleton<VolumeMountFormData> | undefined>(undefined);

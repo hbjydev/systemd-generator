@@ -1,10 +1,10 @@
 import type { ChangeEvent } from "react";
 import React, { useContext } from "react";
-import { FormContext } from "../lib/context";
+import { ServiceTimerContext } from "../lib/context";
 import type { SystemdServiceRestartType } from "../lib/service";
 
 export const RestartTypeField: React.FC = () => {
-  const formData = useContext(FormContext);
+  const formData = useContext(ServiceTimerContext);
 
   const onChange = (ev: ChangeEvent<HTMLSelectElement>) => {
     formData?.update({
