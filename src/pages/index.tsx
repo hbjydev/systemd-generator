@@ -2,6 +2,8 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import type { ChangeEventHandler, Dispatch, SetStateAction } from "react";
 import { useState } from "react";
+import { SystemdService } from "../lib/service";
+import { SystemdTimer } from "../lib/timer";
 
 type HandleUpdateFunc<T> = (fn: Dispatch<SetStateAction<T>>) => ChangeEventHandler<HTMLInputElement>
 
@@ -20,26 +22,23 @@ const Home: NextPage = () => {
     fn(ev.target.checked);
   };
 
-  const unit = `[Unit]
-Description=${description}${isTimer ? `\nWants=${name}.timer` : ''}
+  const service = new SystemdService(
+    name,
+    description,
+    program,
+    isTimer ? 'oneshot' : 'simple'
+  );
 
-[Service]
-Type=${isTimer ? 'oneshot' : 'simple'}
-ExecStart=${program}
+  const timer = new SystemdTimer(
+    name,
+    description,
+    `${name}.service`,
+    calendar,
+  );
 
-[Install]
-WantedBy=multi-user.target`;
-
-  const timer = `[Unit]
-Description=${description}
-Requires=${name}.service
-
-[Timer]
-Unit=${name}.service
-OnCalendar=${calendar}
-
-[Install]
-WantedBy=timers.target`;
+  if (isTimer) {
+    service.wants = `${name}.timer`;
+  }
 
   return (
     <>
@@ -126,7 +125,7 @@ WantedBy=timers.target`;
             <div>
               <div className="bg-gray-300 h-10 flex items-center px-4">/etc/systemd/system/{name}.service</div>
               <pre className="bg-gray-100 w-full p-4 flex flex-col gap-1 text-sm">
-                {unit.split('\n').map((v, i) => (
+                {service.toString().split('\n').map((v, i) => (
                   <p key={i} className="h-5">{v}</p>
                 ))}
               </pre>
@@ -135,7 +134,7 @@ WantedBy=timers.target`;
               <div>
                 <div className="bg-gray-300 h-10 flex items-center px-4">/etc/systemd/system/{name}.timer</div>
                 <pre className="bg-gray-100 w-full p-4 flex flex-col gap-1 text-sm">
-                  {timer.split('\n').map((v, i) => (
+                  {timer.toString().split('\n').map((v, i) => (
                     <p key={i} className="h-5">{v}</p>
                   ))}
                 </pre>
@@ -144,7 +143,7 @@ WantedBy=timers.target`;
             }
             <pre className="bg-gray-100 p-4 flex flex-col gap-1 text-sm overflow-x-scroll">
               <p>curl systemd.h4n.io/api/unit?data={Buffer.from(JSON.stringify({ name, description, program, isTimer })).toString('base64')} &gt; /etc/systemd/system/{name}.service</p>
-              {isTimer ? <p>curl systemd.h4n.io/api/timer?data={Buffer.from(JSON.stringify({ name, description, calendar })).toString('base64')} &gt; /etc/systemd/system/{name}.service</p> : null }
+              {isTimer ? <p>curl systemd.h4n.io/api/timer?data={Buffer.from(JSON.stringify({ name, description, calendar })).toString('base64')} &gt; /etc/systemd/system/{name}.timer</p> : null }
             </pre>
           </div>
         </div>
