@@ -7,14 +7,10 @@ import { RestartTypeField } from "../components/RestartTypeField";
 import { FormContext } from "../lib/context";
 import { TextField } from "../components/TextField";
 import { CheckField } from "../components/CheckField";
+import { A } from "../components/A";
 
 const Home: NextPage = () => {
-  const [domain, setDomain] = useState('systemd.h4n.io');
   const context = useContext(FormContext);
-  useEffect(() => {
-    setDomain(window.location.origin);
-  }, [setDomain]);
-
   if (!context) return <h1>Text</h1>;
 
   const service = new SystemdService(
@@ -164,12 +160,9 @@ const Home: NextPage = () => {
                 helper={
                   <>
                     See{" "}
-                    <a
-                      className="font-bold text-blue-500 underline"
-                      href="https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events"
-                    >
+                    <A href="https://www.freedesktop.org/software/systemd/man/systemd.time.html">
                       systemd.time(7)
-                    </a>{" "}
+                    </A>{" "}
                     for syntax help.
                   </>
                 }
