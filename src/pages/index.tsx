@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SystemdService } from "../lib/service";
 import { SystemdTimer } from "../lib/timer";
 import { RestartTypeField } from "../components/RestartTypeField";
@@ -9,7 +9,12 @@ import { TextField } from "../components/TextField";
 import { CheckField } from "../components/CheckField";
 
 const Home: NextPage = () => {
+  const [domain, setDomain] = useState('systemd.h4n.io');
   const context = useContext(FormContext);
+  useEffect(() => {
+    setDomain(window.location.origin);
+  }, [setDomain]);
+
   if (!context) return <h1>Text</h1>;
 
   const service = new SystemdService(
@@ -19,6 +24,7 @@ const Home: NextPage = () => {
     context.data.timer.enabled ? "oneshot" : "simple"
   );
   service.restart = context.data.service.restartType;
+  service.restartSec = context.data.service.restartTime;
   service.startLimitBurst = context.data.startLimitBurst;
   service.startLimitInterval = context.data.startLimitInterval;
 
@@ -70,22 +76,37 @@ const Home: NextPage = () => {
             <div className="flex w-full flex-col gap-6">
               <div className="text-lg font-bold">Service</div>
 
+              <TextField
+                name="program"
+                label="Program"
+                onChange={(ev) => {
+                  context.update({
+                    service: {
+                      ...context.data.service,
+                      execStart: ev.target.value,
+                    },
+                  });
+                }}
+                value={context.data.service.execStart}
+              />
+
               <div className="grid grid-cols-2 gap-3">
+                <RestartTypeField />
+
                 <TextField
-                  name="program"
-                  label="Program"
+                  number
+                  name="restartTime"
+                  label="Restart delay (in seconds)"
                   onChange={(ev) => {
                     context.update({
                       service: {
                         ...context.data.service,
-                        execStart: ev.target.value,
+                        restartTime: parseInt(ev.target.value),
                       },
                     });
                   }}
-                  value={context.data.service.execStart}
+                  value={context.data.service.restartTime?.toString()}
                 />
-
-                <RestartTypeField />
 
                 <TextField
                   number
@@ -94,7 +115,7 @@ const Home: NextPage = () => {
                   onChange={(ev) => {
                     context.update({ startLimitBurst: parseInt(ev.target.value) });
                   }}
-                  value={context.data.startLimitBurst.toString()}
+                  value={context.data.startLimitBurst?.toString()}
                 />
 
                 <TextField
@@ -104,7 +125,7 @@ const Home: NextPage = () => {
                   onChange={(ev) => {
                     context.update({ startLimitInterval: parseInt(ev.target.value) });
                   }}
-                  value={context.data.startLimitInterval.toString()}
+                  value={context.data.startLimitInterval?.toString()}
                 />
               </div>
             </div>
@@ -198,7 +219,7 @@ const Home: NextPage = () => {
             ) : null}
             <pre className="flex flex-col gap-1 overflow-x-scroll bg-gray-100 p-4 text-sm">
               <p>
-                curl systemd.h4n.io/api/unit?data=
+                curl {domain}/api/unit?data=
                 {Buffer.from(
                   JSON.stringify({
                     name: context.data.name,
@@ -211,7 +232,7 @@ const Home: NextPage = () => {
               </p>
               {context.data.timer.enabled ? (
                 <p>
-                  curl systemd.h4n.io/api/timer?data=
+                  curl {domain}/api/timer?data=
                   {Buffer.from(
                     JSON.stringify({
                       name: context.data.name,

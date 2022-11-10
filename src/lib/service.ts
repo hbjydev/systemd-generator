@@ -11,6 +11,7 @@ export type SystemdServiceRestartType =
 
 export class SystemdService extends SystemdUnit {
     public restart?: SystemdServiceRestartType;
+    public restartSec?: number;
 
     constructor(
         name: string,
@@ -28,6 +29,10 @@ ExecStart=${this.execStart}`;
 
         if (this.restart) {
             base = `${base}\nRestart=${this.restart}`;
+        }
+
+        if (this.restartSec) {
+            base = `${base}\nRestartSec=${this.restartSec}`;
         }
 
         return base;

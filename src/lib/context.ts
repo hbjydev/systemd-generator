@@ -5,12 +5,13 @@ export type FormData = {
   name: string;
   description: string;
 
-  startLimitInterval: number;
-  startLimitBurst: number;
+  startLimitInterval?: number;
+  startLimitBurst?: number;
 
   service: {
     execStart: string;
     restartType?: SystemdServiceRestartType;
+    restartTime?: number;
   };
 
   timer: {
